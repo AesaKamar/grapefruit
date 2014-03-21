@@ -49,6 +49,11 @@ gem "activerecord-import", ">= 0.4.0"
 # Simple pagination
 gem "will_paginate"
 
+# Testing
+group :development, :test do
+  gem 'rspec-rails'
+end
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   # helpful if you know you won't have an internet connection
@@ -56,7 +61,7 @@ group :doc do
 end
 
 group :development do
-	gem 'annotate'
+  gem 'annotate'
   gem 'thin'
   # optional, makes git deployment easy.
   # gem 'git-deploy'

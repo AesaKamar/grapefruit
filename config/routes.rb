@@ -43,7 +43,7 @@ Grapefruit::Application.routes.draw do
       end
 
       resources :problem_sets do
-        resources :problems, only: [:create, :update]
+        resources :problems, only: [:create, :update, :destroy]
       end
 
     end

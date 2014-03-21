@@ -21,4 +21,5 @@ class ProblemSet < ActiveRecord::Base
   belongs_to :capsule
   has_many :problems
 
+
 end

@@ -18,7 +18,7 @@
 				<%= f.text_area :question, placeholder: "Question", class: "mathjax-input" %>
 			</div>
 			<div class="small-6 columns">
-				<div class="mathjax"></div>
+				<div class="mathjax"><%= problem.question %></div>
 			</div>
 		</div>
 		<div class="row">
@@ -26,7 +26,7 @@
 				<%= f.text_area :solution, placeholder: "Solution", class: "mathjax-input" %>
 			</div>
 			<div class="small-6 columns">
-				<div class="mathjax"></div>
+				<div class="mathjax"><%= problem.solution %></div>
 			</div>
 		</div>
 	<% end %>

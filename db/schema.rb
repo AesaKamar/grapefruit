@@ -66,7 +66,6 @@ ActiveRecord::Schema.define(version: 20140321042449) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "capsule_id"
-    t.text     "webwork_url"
   end
 
   create_table "problems", force: true do |t|

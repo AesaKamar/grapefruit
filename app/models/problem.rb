@@ -12,4 +12,12 @@
 #
 
 class Problem < ActiveRecord::Base
+
+    # Relationships
+    belongs_to :problem_set
+
+    def valid_answer?(soln)
+        return solution == soln
+    end
+
 end

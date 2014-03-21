@@ -5,7 +5,7 @@ class ProblemsController < ApplicationController
     before_filter :get_capsule
     before_filter :get_capsules
     before_filter :get_problem_set
-    before_filter :get_problem, only: [:update]
+    before_filter :get_problem, only: [:update, :destroy]
 
     layout "course"
 
@@ -27,6 +27,14 @@ class ProblemsController < ApplicationController
         else 
             msg = { status: :error, msg: "Failed to save!" }
         end
+        respond_to do |format|
+            format.json { render json: msg }
+        end
+    end
+
+    def destroy
+        @problem.destroy
+        msg = { status: :success, msg: "Problem deleted!" }
         respond_to do |format|
             format.json { render json: msg }
         end
