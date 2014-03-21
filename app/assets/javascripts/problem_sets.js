@@ -96,6 +96,7 @@ $(document).ready(function() {
 				function(data) {
 					if(data.status == "success") {
 						$target.html("Saved!");
+						$problem.removeClass("new");
 					} else {
 						$target.html("Oops!").addClass("alert");
 					}
