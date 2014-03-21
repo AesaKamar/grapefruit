@@ -2,10 +2,11 @@ class ProblemSetsController < ApplicationController
 
   before_filter :get_course
   before_filter :get_capsule
+  before_filter :get_capsules, only: [:new, :show, :edit]
   before_filter :get_problem_set, only: [:show, :edit, :update, :destroy]
   before_filter :authenticate_user!
 
-  layout "home"
+  layout :get_layout
 
   def new
     @problem_set = @capsule.problem_sets.new
@@ -26,6 +27,7 @@ class ProblemSetsController < ApplicationController
 
   def edit
     authorize! :update, @problem_set
+    @problem_set.problems.new
   end
 
   def update
@@ -45,11 +47,11 @@ class ProblemSetsController < ApplicationController
 
 private
 
-  def get_problem_set
-    @problem_set = ProblemSet.find(params[:problem_set_id] || params[:id])
-    unless @problem_set.present?
-      flash[:error] = "Invalid problem set!"
-      redirect_to root_path
+  def get_layout
+    if ["new", "show", "edit"].include? action_name
+      "course"
+    else
+      "home"
     end
   end
 

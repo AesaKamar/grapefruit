@@ -9,17 +9,28 @@
 <div class="landing">
   
   <div class="description">
-    <h3>Edit <%= @problem_set.name %> from <%= @capsule.name %></h3>
+    <h2>Edit <%= @problem_set.name %> from <%= @capsule.name %></h2>
   </div>
 
   <div class="login">
     <%= form_for [@course, @capsule, @problem_set] do |f| %>
-      <%= devise_error_messages! %>
-
-      <%= f.text_field :name, placeholder: "Name", autofocus: true %></div>
-
+      <%= render "problem_sets/forms", f: f %>
       <div><%= f.submit "Update Problem Set", class: "button small" %></div>
     <% end %>
+
+    <div id="problemCreate" style="margin-bottom: 20px;">
+      <div style="padding-bottom: 20px;">Note: enclose mathematical expresses in backticks (`), entered using shift+tilde (~).</div>
+
+      <div id="problems">
+        <%= render @problem_set.problems %>
+      </div>
+
+      <button class="button small" id="addProblem">Add Problem</button>
+    </div>
   </div>
 
 </div>
+
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML-full">
+</script>

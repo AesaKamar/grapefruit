@@ -65,6 +65,13 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def get_problem_set
+    @problem_set = ProblemSet.find(params[:problem_set_id] || params[:id])
+    unless @problem_set.present?
+      flash[:error] = "Invalid problem set!"
+      redirect_to root_path
+    end
+  end
 
   def get_capsules
     @capsules = @course.capsules.order("created_at DESC")

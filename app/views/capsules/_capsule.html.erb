@@ -1,6 +1,6 @@
 
 
-<li class="course-capsule">
+<li class="course-capsule <% if !@capsule.nil? && @capsule == capsule %>active<% end %>">
 	<div class="capsule-header">
 		<h1 class="capsule-name"><span class="capsule-status"></span>
 			<%= capsule.name %>

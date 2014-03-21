@@ -4,7 +4,7 @@
 #
 #  id             :integer          not null, primary key
 #  problem_set_id :integer
-#  body           :text
+#  question       :text
 #  solution       :text
 #  worth          :integer          default(1)
 #  created_at     :datetime

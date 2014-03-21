@@ -1,0 +1,33 @@
+<% if problem.persisted? %>
+	<div class="problem" id="problem-<%= problem.id %>">
+<% else %>
+	<div class="problem new">
+<% end %>
+	<%= form_for [@course, @capsule, @problem_set, problem] do |f| %>
+		<div class="row">
+			<div class="small-6 columns">
+				<h4>Problem <span class="problemNumber"></span></h4>
+			</div>
+			<div class="small-6 columns text-right">
+				<button class="button small alert remove">Remove</button>
+				<button class="button small save">Save</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="small-6 columns">
+				<%= f.text_area :question, placeholder: "Question", class: "mathjax-input" %>
+			</div>
+			<div class="small-6 columns">
+				<div class="mathjax"></div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="small-6 columns">
+				<%= f.text_area :solution, placeholder: "Solution", class: "mathjax-input" %>
+			</div>
+			<div class="small-6 columns">
+				<div class="mathjax"></div>
+			</div>
+		</div>
+	<% end %>
+</div>

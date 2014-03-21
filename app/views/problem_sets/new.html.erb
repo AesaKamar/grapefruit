@@ -9,15 +9,12 @@
 <div class="landing">
   
   <div class="description">
-    <h3>Add Problem Set to <%= @capsule.name %></h3>
+    <h2>Add Problem Set to <%= @capsule.name %></h2>
   </div>
 
   <div class="login">
     <%= form_for [@course, @capsule, @problem_set] do |f| %>
-      <%= devise_error_messages! %>
-
-      <%= f.text_field :name, placeholder: "Name", autofocus: true %></div>
-
+      <%= render "problem_sets/forms", f: f %>
       <div><%= f.submit "Add Problem Set", class: "button small" %></div>
     <% end %>
   </div>

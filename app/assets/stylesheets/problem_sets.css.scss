@@ -1,3 +1,16 @@
 // Place all the styles related to the ProblemSets controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.problem {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 15px 0;
+    margin-bottom: 15px;
+    h4 {
+        margin: 0;
+        padding: 0;
+    }
+    .row:last-child textarea {
+        margin-bottom: 0;
+    }
+}
