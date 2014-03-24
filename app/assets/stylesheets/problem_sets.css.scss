@@ -8,12 +8,11 @@
     box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.1);
     padding: 15px 0;
     margin-bottom: 15px;
+    
     h4 {
         margin: 0;
         padding: 0;
     }
-    .row:last-child textarea {
-        margin-bottom: 0;
-    }
+    .row:last-child textarea { margin-bottom: 0; }
     form { margin-bottom: 0; }
 }

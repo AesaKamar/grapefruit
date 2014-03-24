@@ -1,6 +1,21 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
 
+// Vertically centers any mathjax output
+function verticallyCenterMathJax() {
+	$(".mathjax").each(function(el) {
+		var $el       = $(this),
+			$textarea = $el.parents(".row").find("textarea"),
+			desired   = $textarea.outerHeight(),
+		    height    = $el.height();
+		if(height >= desired) {
+			$el.css('padding-top', "0px");
+		} else {
+			$el.css('padding-top', (desired - height) / 2.0 + "px");
+		}
+	});
+}
+
 $(document).ready(function() {
 	// If we find #problemCreate, we initialize the problem creation system
 	$problemCreate = $("#problemCreate");
@@ -8,6 +23,15 @@ $(document).ready(function() {
 
 	if($problemCreate.length > 0) {
 		console.log("Initializing problem create");
+
+		// Once rerender is complete, vertically center the mathjax output
+		MathJax.Hub.signal.Interest(
+			function (message) {
+				if(message[0] == "End Process") {
+					verticallyCenterMathJax();
+				}
+			}
+		);
 
 		// Get a copy of a blank problem, used to create new problems
 		blankProblem = $(".problem.new").outerHTML();
@@ -35,13 +59,6 @@ $(document).ready(function() {
 
 			// Force mathjax rerender
 			MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
-
-			// Once rerender is complete, vertically center the mathjax output
-			MathJax.Hub.signal.Interest(
-			  function (message) {
-			  	// console.log(message);
-			  }
-			);
 		}
 		// Bind update event to any existing problems
 		$(".mathjax-input").keyup(function(e) { updateProblem(e); });
