@@ -15,7 +15,7 @@
   <div class="login">
     <%= form_for [@course, @capsule, @problem_set] do |f| %>
       <%= render "problem_sets/forms", f: f %>
-      <div><%= f.submit "Update Problem Set Name", class: "button small" %></div>
+      <div><%= f.submit "Save Problem Set Name", class: "button small" %></div>
     <% end %>
 
     <div id="problemCreate" style="margin-bottom: 20px;">
