@@ -14,8 +14,11 @@
 
   <div class="login">
     <%= form_for [@course, @capsule, @problem_set] do |f| %>
+
       <%= render "problem_sets/forms", f: f %>
+
       <div><%= f.submit "Add Problem Set", class: "button small" %></div>
+
     <% end %>
   </div>
 
