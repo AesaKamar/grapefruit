@@ -31,6 +31,6 @@
 
 </div>
 
-<script type="text/javascript"
-  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML-full">
-</script>
+<% content_for :javascript_includes do %>
+  <%= javascript_include_tag "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML-full" %>
+<% end %>

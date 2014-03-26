@@ -26,6 +26,7 @@
     <%= yield(:stylesheets) if content_for?(:stylesheets) %>
 
     <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+    <%= yield :javascript_includes if content_for?(:javascript_includes) %>
 
     <script type="text/javascript" src="//use.typekit.net/tyv1luk.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
