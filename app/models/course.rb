@@ -45,6 +45,10 @@ class Course < ActiveRecord::Base
   # ========================================================
   friendly_id :name, use: [:slugged, :finders, :history]
 
+  # Constants
+  TYPE_STUDENT = 0
+  TYPE_ASSISTANT = 1
+
   def slug_candidates
     [
       :name#,
@@ -65,7 +69,7 @@ class Course < ActiveRecord::Base
     students_to_add.each do |student|
       if student.valid?
         unless self.students.include?(student)
-          course_users.push CourseUser.new(user_id: student.id, course_id: self.id)
+          course_users.push CourseUser.new(user_id: student.id, course_id: self.id, type: TYPE_STUDENT)
         end
       end
     end
@@ -74,7 +78,7 @@ class Course < ActiveRecord::Base
   end
 
   def remove_student(student_to_remove)
-    CourseUser.where(user_id: student_to_remove.id, course_id: self.id).destroy_all
+    CourseUser.where(user_id: student_to_remove.id, course_id: self.id, type: TYPE_STUDENT).destroy_all
   end
 
   def course_user(user)
