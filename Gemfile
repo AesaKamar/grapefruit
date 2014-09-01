@@ -43,6 +43,9 @@ gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jquery-turbolinks'
 
+# react gem for rails
+gem 'react-rails', '~> 1.0.0.pre', github: 'reactjs/react-rails'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
 
