@@ -71,7 +71,7 @@ class CoursesController < ApplicationController
     @course.ensure_webwork_exists(current_user)
     @url = @course.webwork_url
   end
-  
+
   def students
     authorize! :update, @course
     @students = @course.students
@@ -80,13 +80,21 @@ class CoursesController < ApplicationController
   def manage
     authorize! :manage, @course
     @hide_sidebar = true
+    @data = {
+      # :capsules => @course.capsules.order("created_at DESC")
+      # :lecture => @course.capsules
+    }
+    # for  capsules in @course.capsules
+      # capsule_with_lectures = []
+      # @data <<
+
   end
 
   def stats
     @hide_sidebar = true
   end
 
-private
+  private
 
   def course_params
     params.require(:course).permit(:name, :description, :subject, :course_number,

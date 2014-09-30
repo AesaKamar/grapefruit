@@ -294,6 +294,11 @@ span[class*="status"] {
     }
 }
 
+.open {
+}
+.close {
+    display: none !important;
+}
 
 .course-accordion--mobile {
     min-height: 150%;

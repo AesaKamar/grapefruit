@@ -20,7 +20,7 @@
 
       <%= link_to "show files", "#",
           class: "add secondary slide-reveal",
-          data: { 
+          data: {
             reveal: 'capsule-' + capsule.id.to_s + '-files',
             initial: "show files #{parens(capsule.documents.count)}",
             active: 'hide files'
@@ -51,7 +51,7 @@
     <% if capsule.lectures.empty? %>
       <p class="grey">There aren't any lectures in this capsule yet.</p>
     <% end %>
-    
+
     <%= render collection: capsule.lectures, partial: "lectures/manage_lecture", as: :lecture %>
 
 
