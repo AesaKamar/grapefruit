@@ -5,13 +5,13 @@
 <% content_for :content do %>
 
   <div class="top-bar-container">
-    
+
     <%= render 'global/flash' %>
-    
+
     <div class="top-bar" data-options="is_hover:false">
       <div class="title-area">
         <%= link_to root_path do %>
-          <%= image_tag 'better-gf-logo_red.png' %>
+          <%= svg_tag asset_path('better-gf-logo_red.svg') %>
         <% end %>
 
         <nav class="mobile-nav">
@@ -31,10 +31,21 @@
 
       <nav class="nav-area horizontal">
         <ul>
-          <li><%= link_to "Home", root_path, class: ("active" if params[:controller] == "home") %></li>
-          <li><%= link_to "Courses", courses_path, class: ("active" if params[:controller] == "courses") %></li>
-          <li><%= link_to "Profile", edit_user_registration_path, class: ("active" if params[:controller] == "devise/registrations") %></li>
-          <li><%= link_to "Logout", destroy_user_session_path, class: "secondary", method: :delete %></li>
+          <li>
+            <%= link_to "Home", root_path,
+              class: ("active" if params[:controller] == "home") %>
+          </li><li>
+            <%= link_to "Courses", courses_path,
+              class: ("active" if (@course.present? || params[:controller] == "courses")) %>
+          </li><li>
+            <%= link_to "Profile", edit_user_registration_path,
+            controllerlass: ("active" if params[:controller] == "devise/registrations") %>
+          </li><li>
+            <%= link_to "Help", contact_path %>
+          </li><li>
+            <%= link_to "Logout", destroy_user_session_path,
+              class: "secondary", method: :delete %>
+          </li>
         </ul>
       </nav>
     </div>

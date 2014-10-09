@@ -46,6 +46,14 @@ ActiveRecord::Schema.define(version: 20140702031224) do
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
 
+  create_table "announcements", force: true do |t|
+    t.string   "title"
+    t.text     "content"
+    t.integer  "course_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "capsules", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -130,6 +138,15 @@ ActiveRecord::Schema.define(version: 20140702031224) do
     t.integer  "capsule_id"
   end
 
+  create_table "problems", force: true do |t|
+    t.integer  "problem_set_id"
+    t.text     "question"
+    t.text     "solution"
+    t.integer  "worth",          default: 1
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "replies", force: true do |t|
     t.integer  "course_id"
     t.integer  "topic_id"
@@ -153,12 +170,12 @@ ActiveRecord::Schema.define(version: 20140702031224) do
   end
 
   create_table "users", force: true do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
+    t.string   "email",                  default: "",    null: false
+    t.string   "encrypted_password",     default: "",    null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer  "sign_in_count",          default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -166,6 +183,7 @@ ActiveRecord::Schema.define(version: 20140702031224) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name"
+    t.boolean  "can_create_courses",     default: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

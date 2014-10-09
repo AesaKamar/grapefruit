@@ -5,13 +5,19 @@
 
   <fieldset>
 
-    <legend>Login</legend>
+    <h3>Login</h3>
 
     <%= f.email_field :email, autofocus: true, placeholder: "Email", class: "large" %>
 
     <%= f.password_field :password, placeholder: "Password", class: "large" %>
 
     <%= f.submit "Login", class: "button" %>
+
+    <% if admin_user_signed_in? %>
+
+      <p>Or, <%= link_to 'login with a user ID', become_path %> as an admin. </p>
+
+    <% end %>
 
     <div class="center">
       <%= render "devise/shared/links" %>

@@ -16,7 +16,7 @@ class LecturesController < ApplicationController
     @lecture = @capsule.lectures.new(lecture_params)
     if @lecture.save
       flash[:success] = "Lecture created!"
-      redirect_to [@course, @capsule, @lecture]
+      redirect_to course_manage_path(@course)
     else
       render 'new'
     end
@@ -41,7 +41,7 @@ class LecturesController < ApplicationController
     authorize! :update, @lecture
     if @lecture.update_attributes(lecture_params)
       flash[:success] = "Lecture updated!"
-      redirect_to [@course, @capsule, @lecture]
+      redirect_to course_manage_path(@course)
     else
       render "edit"
     end
@@ -76,7 +76,7 @@ class LecturesController < ApplicationController
 
   def list_comments
     authorize! :show, @lecture
-    render json: @lecture.comments.order('created_at DESC').limit(50)
+    render json: @lecture.comments.order('created_at ASC').limit(50)
   end
 
   def destroy

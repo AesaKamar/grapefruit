@@ -38,8 +38,10 @@ class Course < ActiveRecord::Base
   has_many :students, class_name: "User", through: :course_users, source: :user
   has_many :assistants, class_name: "User", through: :course_users, source: :user
   has_many :capsules, dependent: :destroy
+  has_many :lectures, through: :capsules
   has_many :documents, dependent: :destroy
   has_many :topics, dependent: :destroy
+  has_many :announcements, dependent: :destroy
 
   # Friendly_id definitions
   # ========================================================

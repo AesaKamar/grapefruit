@@ -11,10 +11,10 @@
 // about supported directives.
 //
 //= require jquery
-//= //require jquery.turbolinks
+//= require jquery.turbolinks
 //= require jquery_ujs
 //= require foundation
-//= //require turbolinks
+//= require turbolinks
 //= require_tree .
 
 function html_escape(str) {
@@ -30,14 +30,171 @@ $("document").ready(function(){
 
   $(document).foundation();
 
-  var flash = $("div#top-flash");
+  /* TODO: all of this needs to be objectified */
+
+  /*
+    flash alerts
+  */
+
+  var flash = $("#top-flash");
   var flash_exists = (flash.children().length > 0) ? true : false;
-  
+  var flash_fade_time = 300;
+  var flash_delay_time = 6000;
+
   if(flash_exists){
-    flash.delay(3800).fadeOut(420);
+    flash.children("div").append($('<a href="#" id="flash-close" class="">(close)</a>)'));
+    flash.delay(flash_delay_time).fadeOut(flash_fade_time);
   }else{
     flash.hide();
   }
+
+  $("#flash-close").on('click', function(){
+    flash.stop().fadeOut(flash_fade_time);
+    return false;
+  });
+
+  /*
+    turn off the lights for video
+  */
+
+  var current_body_color = $("div.main-content").css("background-color");
+  var animate_time = 300;
+  var turn_dark_els = $("body,div.main-content,footer");
+  var is_dark = false;
+
+  $("a#off-lights").on('click', function(e){
+
+    e.preventDefault();
+
+    var color = is_dark ? current_body_color : "#1e1e1e";
+    var text = is_dark ? "Turn Off the Lights" : "Turn On the Lights";
+
+    turn_dark_els.stop().animate({ backgroundColor: color}, animate_time);
+    $(this).html(text);
+
+    $(".top-bar-container").slideToggle(animate_time);
+    $("h5.video-title,a.video-action").toggleClass("dark");
+
+    is_dark = !is_dark;
+
+     return false;
+
+  });
+
+  /*
+    slide reveal
+  */
+
+  // Set the text for depressed buttons that reveal a panel
+  function set_reveal_text(el){
+    if(el.data("initial")){
+      el.html((el.hasClass('revealing')) ? el.data('active') : el.data('initial'));
+    }
+  }
+
+  $("a.slide-reveal").each(function(){
+    set_reveal_text($(this));
+  });
+
+  /*
+    lecture text parsing
+  */
+  var $lectureDescription = $("p.lecture-description");
+  if($lectureDescription.length){
+    $lectureDescription.html(Autolinker.link($lectureDescription.html()));
+  }
+
+  /*
+    youtube parsing
+  */
+  var YoutubeParser = {
+
+    // courtesy of https://gist.github.com/takien/4077195
+    get_id: function(url){
+      var youtube_id = '';
+      url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+      if(url[2] !== undefined) {
+        youtube_id = url[2].split(/[^0-9a-z_]/i);
+        youtube_id = youtube_id[0];
+      }
+      else {
+        youtube_id = "false";
+      }
+      return youtube_id;
+    },
+
+    youtube_iframe_for_id: function(youtube_id){
+      return '<iframe width="560" height="315" src="//www.youtube.com/embed/' + youtube_id + '" frameborder="0" allowfullscreen></iframe>';
+    },
+
+    get_html: function(url){
+      var youtube_id = this.get_id(url);
+      if(youtube_id == "false"){
+        return '';
+      }else{
+        return this.youtube_iframe_for_id(youtube_id);
+      }
+    },
+
+  };
+
+  // Manage AJAX requests for maintaining the state of open panels
+  var management_state = {
+
+    // Get the state from the server, open relevant panels
+    // This is called when the document loads
+
+    get: function(){
+      $.post("/management_state", {open_panels: "get"}, function(response){
+        management_state.open_panels(String(response));
+      });
+    },
+
+    // Persist the current state to a cookie
+    // This is called when it modified (i.e. a button click)
+    set: function(state){
+      $.post("/management_state", {open_panels: state}, function(response){});
+    },
+
+    // Open panels that should be revealed based on state
+    open_panels: function(p){
+        var panels = String(p).split(',');
+        for(var i = 0; i < panels.length; i++){
+          if(panels[i] == " ") continue;
+          var panel_el = $("#" + panels[i]);
+          if(panel_el.length){
+            panel_el.addClass('revealed').show();
+            var link_showing = $("a[data-reveal='" + panel_el.attr('id') + "']");
+            link_showing.addClass('revealing').html(link_showing.data('active'));
+          }
+        }
+    }
+
+  };
+
+  $("a.slide-reveal").on('click', function(e){
+
+    e.preventDefault();
+
+    // reveal/hide and change text if necessary
+    $(this).toggleClass('revealing');
+    $("#" + $(this).data('reveal')).slideToggle(200).toggleClass('revealed');
+    set_reveal_text($(this));
+
+    // send a cookie with the management state
+    var open_panels = [];
+    $('div.reveal-hidden').each(function(){
+      if($(this).hasClass('revealed')){
+        open_panels.push($(this).attr('id'));
+      }
+    });
+    management_state.set(open_panels.join(','));
+
+  });
+
+  // on document load, get the state from a cookie
+  // if it exists
+  management_state.get();
 
   var sidebar = {
   	init: function(a){
@@ -101,7 +258,7 @@ $("document").ready(function(){
        p = typeof p !== 'undefined' ? p : false;
        i = typeof i !== 'undefined' ? i : false;
        if(c && p && i && (c * p * i) > 0){
-         this.navigateToCapsule(c).navigateToType(p).navigateToItem(i); 
+         this.navigateToCapsule(c).navigateToType(p).navigateToItem(i);
        }else if(c && p && (c * p) > 0){
          this.navigateToCapsule(c).navigateToType(p);
        }else if(c && c > 0){
@@ -115,37 +272,69 @@ $("document").ready(function(){
 
   if($("#lecture-comments").length){
 
-    var refresh_comments = function(){
-      var lecture_id = $("#lecture-comments").data("lecture-id");
-      var list_url = $("#lecture-comments").data("url");
+    var lecture_id = $("#lecture-comments").data("lecture-id");
+    var list_url = $("#lecture-comments").data("url");
+    var loaded_comment_ids = [];
+
+    var get_comment_content = function(comment){
+      var self = comment;
+      var content = "<p class='lecture-comment'>";
+      content += "<strong>" + self.author.display_identifier + "</strong>: ";
+      content += Autolinker.link(html_escape(self.body));
+      content += "&nbsp;&nbsp;<span class='comment-date' data-time='" + self.posted_time + "'></span> ";
+      content += YoutubeParser.get_html(self.body);
+      content += "</p>";
+      return content;
+    }
+
+    var push_comments_to_dom = function(comments){
+
+      var $container = $("#lecture-comments");
+
+      $container.children('p.empty').remove();
+
+      if(comments.length == 0){
+        $container.html("<p class='empty'>No comments yet! Be the first.</p>")
+      }
+
+      $.each(comments, function() {
+        if($.inArray(this.id, loaded_comment_ids)!==-1)
+          return true;
+        loaded_comment_ids.push(this.id);
+        var comment = get_comment_content(this);
+        $container.prepend(comment);
+      });
+
+      // update the date for each comment
+      $('p.lecture-comment').each(function(){
+          $span = $(this).children('span.comment-date');
+          $span.html($.timeago($span.data('time')));
+      });
+
+    }
+
+    var download_latest_comments = function(){
+
       $.ajax({
         type: "GET",
         url: list_url,
         data: {lecture: lecture_id}
       }).done(function(comments) {
-        $("#lecture-comments").html("");
-        $.each(comments, function() {
-          var comment = "<p>";
-          comment += "<strong>" + this.author.display_identifier + "</strong>: ";
-          comment += Autolinker.link(html_escape(this.body));
-          comment += "&nbsp;&nbsp;<span class='comment-date'>" + this.relative_time + " ago </span> ";
-          comment += "</p>";
-          $("#lecture-comments").append(comment);
-        });
-        if(comments.length == 0){
-          $("#lecture-comments").append("<p class='empty'>No comments yet! Be the first.</p>")
-        }
+        push_comments_to_dom(comments);
+        setTimeout(download_latest_comments, 300);
       }).fail(function(error, as){
-
+        console.log('Getting latest comments failed!');
+        push_comments_to_dom([]);
+        setTimeout(download_latest_comments, 2000);
       });
-      setTimeout(refresh_comments, 5000);
-    };
 
-    refresh_comments();
+    }
+
+    download_latest_comments();
 
     $("#comments-submit").on("ajax:success", function(){
       $("#comment-body").val("").select();
-      refresh_comments();
+      download_latest_comments();
     });
 
     $("#lecture-comments").on("mouseover", "p", function(){

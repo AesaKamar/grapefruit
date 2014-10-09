@@ -6,8 +6,8 @@
 #   cities = City.create!([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create!(name: 'Emanuel', city: cities.first)
 
-AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password')
-professor_one = User.create!(name: "Prabhat Hajela", email: "hajelap@rpi.edu", password: "password")
+AdminUser.create!(:email => 'admin@example.com', :password => 'password', :password_confirmation => 'password')
+professor_one = User.create!(name: "Michael Bluth", email: "bluth@bluth.com", password: "password")
 
 student_one = User.create!(name: "Maebe Funke", email: "maebe@bluth.com", password: "password")
 student_two = User.create!(name: "George-Michael Bluth", email: "georgemichael@bluth.com", password: "password")

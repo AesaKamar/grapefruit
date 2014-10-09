@@ -1,19 +1,6 @@
 <% page_title @lecture.name %>
-<script>
-var capsule_id = <%= @capsule.id %>;
-var lecture_id = <%= @lecture.id %>;
-</script>
 
 <h2><%= @lecture.name %> <sup><%= 'LIVE &#149;'.html_safe if @lecture.live %></sup></h2>
-
-<% if can? :manage, @course %>
-
-  <%= link_to "Add File", new_course_capsule_lecture_document_path(@course, @capsule, @lecture), class: "button small" %>
-  <%= link_to "Edit Lecture", edit_course_capsule_lecture_path(@course, @capsule, @lecture), class: "button small" %>
-  <% if citrus_on %>
-    <%= link_to @live_button, course_capsule_lecture_toggle_live_path(@course, @capsule, @lecture), class: "button small alert" %>
-  <% end %>
-<% end %>
 
 <% if @lecture.live %>
   <%= link_to 'Live Feed &nbsp; &#10148;'.html_safe, course_capsule_lecture_comments_path(@course, @capsule, @lecture),
@@ -23,29 +10,23 @@ var lecture_id = <%= @lecture.id %>;
 <%= link_to_textbook_problem_sets(@course) %>
 
 <% unless @lecture.description.blank? %>
-  <p class="description expandable-text"><%= @lecture.description %></p>
+  <p class="description lecture-description"><%= @lecture.description %></p>
 <% end %>
 
 <%= render "documents/documents", container: @lecture %>
 
-<div>
-  <h3>Videos</h3>
-
-  <% if can? :manage, @course %>
-   <div>
-     <%= link_to "New Video", new_course_capsule_lecture_video_path(@course, @capsule, @lecture), class: "button small" %>
-   </div>
-  <% end %>
-
-  <% if @videos.empty? %>
-    <p>No videos found.</p>
-  <% end %>
-
-  <% @videos.each do |video| %>
-    <%= render video %>
-    <% if @videos.length > 1 %>
-      <div class="custom-hr"></div>
+<% if @videos.present? %>
+  <div>
+    <h3>Videos</h3>
+    <% @videos.each do |video| %>
+      <%= render video %>
+      <% if @videos.length > 1 %>
+        <div class="custom-hr"></div>
+      <% end %>
     <% end %>
-  <% end %>
-</div>
+  </div>
+<% end %>
 
+<% if @documents.empty? && @videos.empty? %>
+  <p class="grey">Looks like there's no content in this lecture yet!</p>
+<% end %>
