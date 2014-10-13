@@ -1,5 +1,13 @@
 /** @jsx React.DOM */
 
+var LectureStruct = function() {
+    return {
+        name        : '',
+        description : '',
+        id          : Math.floor(Math.random()*500)
+    };
+};
+
 var Capsule = React.createClass({
     getInitialState: function () {
         return {
@@ -47,6 +55,17 @@ var Capsule = React.createClass({
 
         this.setState({description: this.refs.description.getDOMNode().value })
     },
+    addLecture: function () {
+        var lectures = this.state.lectures;
+        var newLectures = lectures.concat([LectureStruct()]);
+        this.setState({lectures: newLectures});
+    },
+    remove: function() {
+        this.props.removeCapsule(this.props.key);
+    },
+    needsEditing: function () {
+        !this.state.title? 1 : 0;
+    },
     render: function () {
 
         var edit = this.state.edit ? 'Finished Editing' : 'Edit Capsule';
@@ -56,11 +75,11 @@ var Capsule = React.createClass({
                 <div className="capsule-container">
 
                     <h4>
-                    Capsule: <input ref="title" onChange={this.updateTitle} defaultValue={this.state.title}></input>
+                    Capsule: <input ref="title" onChange={this.updateTitle} placeholder="your title" defaultValue={this.state.title}></input>
                     </h4>
 
                     <div className={ 'capsule ' + this.state.class} id="capsule-{this.props.key}">
-                        <textarea ref="description" onChange={this.updateDescription} defaultValue={this.state.description}></textarea>
+                        <textarea ref="description" onChange={this.updateDescription} placeholder="Capsule description goes here" defaultValue={this.state.description}></textarea>
 
                         <p>
 
@@ -74,7 +93,7 @@ var Capsule = React.createClass({
 
                             <span className="space"></span>
 
-                            <a className="add">add lecture</a>
+                            <a onClick={this.addLecture} className="add">add lecture</a>
 
                         </p>
 
@@ -102,16 +121,16 @@ var Capsule = React.createClass({
                 <div className="capsule-container">
 
                     <h4>
-                    Capsule: <a onClick={this.expand}>{this.state.title}</a>
+                    Capsule: <a onClick={this.expand} className={this.state.title? '' : 'needsEditing missingInfo'} >{this.state.title? this.state.title : 'Click edit to add a title' }</a>
                     </h4>
 
                     <div className={ 'capsule ' + this.state.class} id="capsule-{this.props.key}">
-                        <p>{this.state.description}</p>
+                        <p className={this.state.description? '' : 'missingInfo'} >{this.state.description? this.state.description : 'Click edit to add a description' }</p>
 
                         <p>
 
                             <a className="add" onClick={this.edit}>{ edit }</a>
-                            <a className="add alert">remove capsule</a>
+                            <a onClick={ this.remove } className="add alert">remove capsule</a>
 
                             <span className="space"></span>
 
@@ -120,7 +139,7 @@ var Capsule = React.createClass({
 
                             <span className="space"></span>
 
-                            <a className="add">add lecture</a>
+                            <a onClick={this.addLecture} className="add">add lecture</a>
 
                         </p>
 
@@ -138,7 +157,7 @@ var Capsule = React.createClass({
                         Lectures ({ this.state.lectures.length } total)
                         </p>
 
-                        <LectureList lectures={ this.props.lectures } />
+                        <LectureList lectures={ this.state.lectures } />
 
 
                     </div>

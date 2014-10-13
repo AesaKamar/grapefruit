@@ -3,18 +3,18 @@
 var placeholder = document.createElement("div");
 placeholder.className = "placeholder";
 
-var LectureList = React.createClass({
+var FileList = React.createClass({
     getInitialState: function() {
-        return {lectures: this.props.lectures};
+        return {files: this.props.files};
     },
     render: function () {
-        var lectureNodes = this.props.lectures.map(function ( lecture ) {
-            return <Lecture dragStart={ this.dragStart } dragEnd={ this.dragEnd }  name={ lecture.name } description={ lecture.description } key={ lecture.id } />
+        var fileNodes = this.props.files.map(function ( file ) {
+            return <File dragStart={ this.dragStart } dragEnd={ this.dragEnd }  name={ file.name } key={ file.id } />
         }, this);
 
         return (
-            <div onDragOver={this.dragOver} className="lecture-list">
-            { lectureNodes }
+            <div onDragOver={this.dragOver} id="course-files" className="panel">
+            { fileNodes }
             </div>
         )
     },
@@ -34,13 +34,13 @@ var LectureList = React.createClass({
         this.dragged.parentNode.removeChild(placeholder);
 
         // Update data
-        var lectures = this.state.lectures;
+        var files = this.state.files;
         var from = Number(this.dragged.dataset.id);
         var to = Number(this.over.dataset.id);
         if(from < to) to--;
         if(this.nodePlacement == "after") to++;
-        lectures = lectures.splice(to, 0, lectures.splice(from, 1)[0]);
-        this.setState({lectures: lectures});
+        files = files.splice(to, 0, files.splice(from, 1)[0]);
+        this.setState({files: files});
     },
     dragOver: function(e) {
         e.preventDefault();

@@ -14,10 +14,15 @@ var Lecture = React.createClass({
     },
     render: function () {
         return (
-            <div className="lecture-container">
+            <div data-id={this.props.key}
+                key={this.props.key}
+                draggable="true"
+                onDragStart={this.props.dragStart}
+                onDragEnd={this.props.dragEnd}
+                className="lecture-container">
 
                 <h5>
-                Lecture: <a onClick={this.expand}>{ this.props.name }</a>
+                Lecture: <a onClick={this.expand} className={this.props.name? '' : 'needsEditing missingInfo'} >{this.props.name? this.props.name : 'Click edit to add a title' }</a>
                 </h5>
 
                 <div className={'lecture ' + this.state.class} id="lecture-<%= lecture.id %>">
